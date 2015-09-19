@@ -32,9 +32,6 @@ if __name__ == '__main__':
     import copy
     import shutil
     
-    # Change this Varible to the Number you'd like to Control for
-    varNumber = '8'
-    Bands = ["Micro 0-13K","HV1 120K-500K","HV2 500K-1M","HV3 1M-MAX","Large 52K-120K", "Medium 26K-52K", "Small 13K-26K" ]
     #Defenses = ['Miami','Baltimore','St Louis','Seattle','Carolina','Arizona','Houston','Tennessee','Cleveland','Cincinnati','New Orleans','Green Bay','Indianapolis','Buffalo','Minnesota','Kansas City','Philadelphia','New York','San Francisco','San Diego','New England','Detroit','Pittsburgh','Oakland','Denver','Dallas','Washington','Jacksonville','Atlanta','New York','Tampa Bay','Chicago']
     NotPlaying = ['Dez Bryant','Geno Smith','Charlie Whitehurst','Landry Jones','Stephen Morris','Trevor Siemian','Taylor Heinicke','Tyler Clutts','Jerome Felton','Marcus Thigpen','Marlon Moore','Will Johnson']
     FanDuelData = []
@@ -63,7 +60,7 @@ if __name__ == '__main__':
                     for row in DataCaptured:
                         if row[1] =='D':
                             s = row[3]
-                            # Don thing for Defenses now
+                            # Don't do anything for Defenses now
                         else:
                             name = row[2]+' '+row[3]
                             points = row[4]
@@ -91,15 +88,18 @@ if __name__ == '__main__':
             if file[0:3]=='DKS': 
                 outPut = "Result.csv"
                 outTemp = "Temp.csv"
-                with open(file) as inp, open(outPut, "wb") as out_main, open(outTemp, "wb") as out_temp:
+                checkPlayers = "Promising.csv"
+                with open(file) as inp, open(outPut, "wb") as out_main, open(outTemp, "wb") as out_temp, open(checkPlayers, "wb") as check_Players:
                     writerMain = csv.writer(out_main)
                     writerTemp = csv.writer(out_temp)
+                    writerPromising = csv.writer(check_Players)
                     reader = csv.reader(inp)
                     headers = next(reader,None)
                     if headers:
                         #writerTemp.writerow(headers)
                         # headers.insert(0,'Name ID')
                         writerMain.writerow(('Name','POS','DK Pts','DK Price','FD Points', 'FD Price', 'DK Price %', 'FD Price %', 'Diff DK/FD'))
+                        writerPromising.writerow(('Name','POS','DK Pts','DK Price','FD Points', 'FD Price', 'DK Price %', 'FD Price %', 'Diff DK/FD'))
                     for row in reader:
                         # Skip DEFENSES for Now and change some of the player's names since they are different in FanDule and DK
                         if row[0]<>'DST' and row[1] not in NotPlaying:
@@ -117,6 +117,8 @@ if __name__ == '__main__':
                             elif s=='EJ Manuel':
                                 s='E.J. Manuel'
                             s.strip()
+
+                           
                             #Now lest find FanDuelData in the FanDuelData list of lists
                             for t in range(len(FanDuelData)):
                                 if FanDuelData[t][0]==s:
@@ -125,8 +127,16 @@ if __name__ == '__main__':
                                     calcDK = float(row[3])/50000
                                     caldFD = float(FanDuelData[t][2])/60000
                                     diff = calcDK-caldFD
-                                   
-                                    writerMain.writerow((row[0],row[1],row[5],row[3],FanDuelData[t][1],FanDuelData[t][2],calcDK,caldFD,diff))
+
+                                    # Only write if DK Price > 2500 (don't care about these players)
+                                    if float(row[3])>2500:
+
+                                        # first write to main file
+                                        writerMain.writerow((row[0],row[1],row[5],row[3],FanDuelData[t][1],FanDuelData[t][2],calcDK,caldFD,diff))
+                                        
+                                        # If promising, write to a special file
+                                        if diff <0:
+                                            writerPromising.writerow((row[0],row[1],row[5],row[3],FanDuelData[t][1],FanDuelData[t][2],calcDK,caldFD,diff))
                                     break
                     try:
                         inp.close()
@@ -138,23 +148,23 @@ if __name__ == '__main__':
                     try:
                         out_main.close()
                         out_temp.close()
+                        checkPlayers.close()
                         os.rename(outTemp, file)
                         #change the extension of the disabled file
-                        base = os.path.splitext(outPut)[0]
-                        os.rename(outPut, base+ ".txt")
+                        #base = os.path.splitext(outPut)[0]
+                        #os.rename(outPut, base+ ".txt")
                     except:
                         print "Problems renaming file"
 
                 
-    dirs = os.listdir(path)
-    os.chdir(path)
+    #dirs = os.listdir(path)
+    #os.chdir(path)
                  
             
-    # rename Results.csv into Excel
-    for file in dirs:
-        if file[len(file)-3:len(file)]=='txt':
-            base = os.path.splitext(file)[0]
-            os.rename(file, base+ ".csv")
+    #for file in dirs:
+    #    if file[len(file)-3:len(file)]=='txt':
+    #        base = os.path.splitext(file)[0]
+    #        os.rename(file, base+ ".csv")
            
             
     dirs = os.listdir(path)
