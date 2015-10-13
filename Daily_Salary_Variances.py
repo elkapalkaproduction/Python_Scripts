@@ -33,7 +33,7 @@ if __name__ == '__main__':
     import shutil
     
     #Defenses = ['Miami','Baltimore','St Louis','Seattle','Carolina','Arizona','Houston','Tennessee','Cleveland','Cincinnati','New Orleans','Green Bay','Indianapolis','Buffalo','Minnesota','Kansas City','Philadelphia','New York','San Francisco','San Diego','New England','Detroit','Pittsburgh','Oakland','Denver','Dallas','Washington','Jacksonville','Atlanta','New York','Tampa Bay','Chicago']
-    NotPlaying = ['Dez Bryant','Geno Smith','Charlie Whitehurst','Landry Jones','Stephen Morris','Trevor Siemian','Taylor Heinicke','Tyler Clutts','Jerome Felton','Marcus Thigpen','Marlon Moore','Will Johnson']
+    NotPlaying = ['Geno Smith','Charlie Whitehurst','Landry Jones','Stephen Morris','Trevor Siemian','Taylor Heinicke','Tyler Clutts','Jerome Felton','Marcus Thigpen','Marlon Moore','Will Johnson']
     FanDuelData = []
 
     
