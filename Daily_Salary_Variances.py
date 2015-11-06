@@ -23,6 +23,10 @@ This script will look attempt to do the following
     I.  Diff DK-FD = DK Price% - FD Price%
 
 '''
+
+DKSalaryCap = 50000
+FDSalaryCap = 60000
+
 from _ssl import err_codes_to_names
 from collections import defaultdict
 
@@ -124,8 +128,8 @@ if __name__ == '__main__':
                                 if FanDuelData[t][0]==s:
                                     row.insert(0,s)
 
-                                    calcDK = float(row[3])/50000
-                                    caldFD = float(FanDuelData[t][2])/60000
+                                    calcDK = float(row[3])/DKSalaryCap
+                                    caldFD = float(FanDuelData[t][2])/FDSalaryCap
                                     diff = calcDK-caldFD
 
                                     # Only write if DK Price > 2500 (don't care about these players)
